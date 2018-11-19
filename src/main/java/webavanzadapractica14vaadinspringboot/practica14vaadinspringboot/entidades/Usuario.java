@@ -2,11 +2,12 @@ package webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.entidad
 
 import javax.persistence.Entity;
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class Usuario {
+public class Usuario implements Serializable {
     @Id
     private String username;
     private String password;

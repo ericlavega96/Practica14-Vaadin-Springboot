@@ -3,6 +3,7 @@ package webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.entidad
 import javax.persistence.*;
 import java.io.Serializable;
 
+@Entity
 public class Rol implements Serializable {
     @Id
     private String rol;
