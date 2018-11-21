@@ -1,5 +1,7 @@
 package webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.entidades;
 
+import org.vaadin.calendar.CalendarItemTheme;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -47,5 +49,9 @@ public class Evento implements Serializable {
 
     public void setFecha(Date fecha) {
         this.fecha = fecha;
+    }
+
+    public CalendarItemTheme getTema(){
+        return CalendarItemTheme.Blue;
     }
 }
