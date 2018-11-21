@@ -3,6 +3,7 @@ package webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.entidad
 import javax.persistence.Entity;
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -46,5 +47,14 @@ public class Usuario implements Serializable {
 
     public void setRoles(Set<Rol> roles) {
         this.roles = roles;
+    }
+
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", roles=" + (roles == null ? "No hay roles": Arrays.asList(roles).toString()) +
+                '}';
     }
 }

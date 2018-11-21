@@ -21,7 +21,7 @@ public class Gerente implements Serializable {
     private String correo;
 
     @NotNull
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Usuario usuario;
 
     public Gerente() {
@@ -72,5 +72,16 @@ public class Gerente implements Serializable {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    @Override
+    public String toString() {
+        return "Gerente{" +
+                "id=" + idGerente +
+                ", nombres='" + nombres + '\'' +
+                ", apellidos='" + apellidos + '\'' +
+                 new String((usuario == null ?", No hay username":usuario.getUsername()))+ '\''+
+                new String((usuario == null ?", No hay password":usuario.getPassword()))+
+                '}';
     }
 }

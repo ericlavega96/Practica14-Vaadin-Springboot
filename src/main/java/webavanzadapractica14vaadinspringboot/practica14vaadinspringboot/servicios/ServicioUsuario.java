@@ -32,6 +32,7 @@ public class ServicioUsuario {
         System.out.println("El usuario administrador ha sido creado satisfactoriamente");
     }
 
+
     public boolean validarUsuario(String username,String password){
         Usuario usuario = repositorioUsuario.findByUsername(username);
         if(usuario != null && password.equals(usuario.getPassword()))

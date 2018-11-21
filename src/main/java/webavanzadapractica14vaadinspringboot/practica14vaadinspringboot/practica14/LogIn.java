@@ -1,5 +1,6 @@
 package webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.practica14;
 
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Label;
@@ -27,10 +28,18 @@ public class LogIn extends VerticalLayout{
         public LogIn() {
             formLayout = new FormLayout();
             label = new Label("Iniciar Sesión");
+
             username = new TextField("Nombre de Usuario");
+            username.setRequired(true);
+            username.setErrorMessage("Por favor, inserte un nombre de usuario");
+
             password = new PasswordField("Contraseña");
+            password.setRequired(true);
+            username.setErrorMessage("Por favor, inserte la contraseña");
+
             logInBtn = new Button("Iniciar Sesión",event -> {
                 if(servicioUsuario.validarUsuario(username.getValue(),password.getValue())){
+                    getUI().get().navigate("index");
                     System.out.println("El usuario se ha logueado satisfactoriamente");
                 }else{
                     System.out.println("Las credenciales introducidas no son válidas");
