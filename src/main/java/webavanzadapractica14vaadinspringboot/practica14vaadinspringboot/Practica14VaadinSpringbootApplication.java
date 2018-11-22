@@ -19,7 +19,9 @@ public class Practica14VaadinSpringbootApplication {
         ApplicationContext applicationContext = SpringApplication.run(Practica14VaadinSpringbootApplication.class, args);
 
         ServicioUsuario servicioUsuario = (ServicioUsuario) applicationContext.getBean("servicioUsuario");
+        ServicioEvento servicioEvento = (ServicioEvento) applicationContext.getBean("servicioEvento");
         servicioUsuario.crearUsuarioAdmin();
+        servicioEvento.crearPrueba();
 
     }
 }
