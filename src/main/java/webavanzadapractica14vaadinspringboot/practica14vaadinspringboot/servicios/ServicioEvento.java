@@ -20,4 +20,10 @@ public class ServicioEvento {
     public Evento registrar(String nombre, Date fecha) {
         return repositorioEvento.save(new Evento(nombre, fecha));
     }
+
+    public void crearPrueba(){
+        Evento prueba = new Evento();
+        prueba.setNombre("prueba");
+        prueba.setFecha(new Date());
+    }
 }

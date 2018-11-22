@@ -34,47 +34,22 @@ public class Calendario extends VerticalLayout {
     @Autowired
     public Calendario() {
 
-
         setAlignItems(Alignment.CENTER);
 
-        HorizontalLayout layoutBotones = new HorizontalLayout();
-        layoutBotones.setSpacing(true);
-
-
-        H1 titulo = new H1("Sistema de Calendarios EA");
-        H2 subtitulo = new H2("Calendario");
-
+        HorizontalLayout layoutHorizontal = new HorizontalLayout();
+        layoutHorizontal.setSpacing(true);
         setAlignItems(Alignment.CENTER);
 
-        add(titulo, subtitulo, layoutBotones, calendar);
+        H1 tituloPoryecto = new H1("Agenda Empresarial - EA");
+        H2 tituloCelendario = new H2("Calendario");
 
 
-        Button add = new Button("Agregar");
-        add.setIcon(new Icon(VaadinIcon.PLUS));
-        add.getElement().setAttribute("theme", "primary");
+        add(tituloPoryecto, tituloCelendario, layoutHorizontal, calendar);
+
     }
 
-    private void abrirPantalla(VerticalLayout form) {
-        Dialog vistaPantalla = new Dialog();
-        vistaPantalla.add(form);
 
-        vistaPantalla.open();
-    }
-
-    private void configuraBotonPantalla(Button boton, VerticalLayout formulario) {
-        boton.addClickListener((e) -> {
-            abrirPantalla(formulario);
-        });
-    }
 }
 
-@SpringComponent
-@UIScope
-class CustomDataProvider extends AbstractCalendarDataProvider<Evento> {
-    @Override
-    public Collection<Evento> getItems(Date fromDate, Date toDate) {
-        List<Evento> eventos = Calendario.servicioEvento.listarEventos();
-        return eventos;
-    }
-}
+
 
