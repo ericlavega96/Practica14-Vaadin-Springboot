@@ -1,8 +1,10 @@
 package webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.practica14;
 
+import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
@@ -13,6 +15,8 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.*;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
+import com.vaadin.flow.data.renderer.NativeButtonRenderer;
 import com.vaadin.flow.data.validator.EmailValidator;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
@@ -47,16 +51,24 @@ public class GerenteView extends VerticalLayout {
     HorizontalLayout h1;
     HorizontalLayout buttonsLayout;
 
+    Grid<Gerente> tablaGerentes;
+
+    DataProvider<Gerente,Void> dataProvider;
+
     Button btnCrear;
     Button btnCancelar;
+    Button eliminarGerente;
     Binder<Gerente> gerenteBinder;
     Binder<Usuario> usuarioBinder;
+
+    Gerente gerenteSeleccionado;
 
     public GerenteView(@Autowired ServicioGerente servicioGerente,@Autowired ServicioUsuario servicioUsuario) {
 
         this.menuUI = new MenuUI();
         this.servicioGerente = servicioGerente;
         this.servicioUsuario = servicioUsuario;
+
 
 
         if(VaadinSession.getCurrent().getAttribute("username") != null){
@@ -73,6 +85,19 @@ public class GerenteView extends VerticalLayout {
             }
         }
 
+
+        dataProvider = DataProvider.fromCallbacks(
+                query -> {
+                   int offset = query.getOffset();
+                   int limit = query.getLimit();
+
+                   return servicioGerente.listaGerentes(offset,limit).stream();
+                },
+                query -> {
+                    return Math.toIntExact(servicioGerente.cantidadGerentes());
+                });
+
+
         infoGerenteLbl = new Label("Información personal");
         infoUsuarioLbl = new Label("Información de usuario");
         gerentLbl = new Label("Gerentes");
@@ -85,8 +110,8 @@ public class GerenteView extends VerticalLayout {
         gerenteFormLayout = new VerticalLayout();
         buttonsLayout = new HorizontalLayout();
 
-        gerenteBinder = new Binder<Gerente>();
-        usuarioBinder = new Binder<Usuario>();
+        gerenteBinder = new Binder<>();
+        usuarioBinder = new Binder<>();
 
         btnCrear = new Button("Crear",event -> {
         try {
@@ -139,6 +164,48 @@ public class GerenteView extends VerticalLayout {
                 .bind(Usuario::getPassword,Usuario::setPassword);
 
 
+        tablaGerentes = new Grid<>();
+        tablaGerentes.setDataProvider(dataProvider);
+        tablaGerentes.addColumn(Gerente::getIdGerente).setHeader("ID");
+        tablaGerentes.addColumn(Gerente::getNombres).setHeader("Nombres");
+        tablaGerentes.addColumn(Gerente::getApellidos).setHeader("Apellidos");
+        tablaGerentes.addColumn(Gerente::getCorreo).setHeader("Correo");
+        tablaGerentes.addColumn(new ComponentRenderer<>(gerente ->  eliminarGerente = new Button(VaadinIcon.TRASH.create(),event -> {
+            Notification.show("Gerente " + gerente.getIdGerente() + " eliminado con éxito!");
+            servicioGerente.eliminar(gerente);
+            dataProvider.refreshAll();
+        }))).setHeader("Eliminar");
+
+        tablaGerentes.addColumn(new ComponentRenderer<>(gerente ->  eliminarGerente = new Button(VaadinIcon.EDIT.create(),event -> {
+            Notification.show("Gerente " + gerente.getIdGerente() + " editado con éxito!");
+            servicioGerente.eliminar(gerente);
+            dataProvider.refreshAll();
+        }))).setHeader("Editar");
+
+        tablaGerentes.addSelectionListener(s->{
+            if(s.getFirstSelectedItem().isPresent()){
+                gerenteSeleccionado = s.getFirstSelectedItem().get();
+                gerenteBinder.readBean(gerenteSeleccionado);
+                eliminarGerente.setEnabled(true);
+                repeatPassword.setVisible(false);
+                username.setVisible(false);
+                password.setVisible(false);
+                infoUsuarioLbl.setVisible(false);
+                repeatPassword.setVisible(false);
+            }else{
+                repeatPassword.setVisible(true);
+                username.setVisible(true);
+                password.setVisible(true);
+                repeatPassword.setVisible(true);
+                infoUsuarioLbl.setVisible(true);
+                eliminarGerente.setEnabled(false);
+            }
+        });
+
+        tablaGerentes.setWidth("50%");
+
+
+
         formLayout = new FormLayout();
         h1 = new HorizontalLayout();
 
@@ -151,8 +218,9 @@ public class GerenteView extends VerticalLayout {
         buttonsLayout.add(btnCrear,btnCancelar);
         formLayout.add(h1);
         gerenteFormLayout.add(formLayout,buttonsLayout);
-        add(menuUI,gerentLbl,gerenteFormLayout);
+        add(menuUI,tablaGerentes,gerentLbl,gerenteFormLayout);
         setSizeFull();
+        dataProvider.refreshAll();
     }
 }
 

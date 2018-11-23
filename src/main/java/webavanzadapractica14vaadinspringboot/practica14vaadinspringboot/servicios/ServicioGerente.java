@@ -1,5 +1,6 @@
 package webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.servicios;
 
+import org.springframework.beans.PropertyValues;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.entidades.Gerente;
@@ -8,6 +9,8 @@ import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.entidade
 import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.repositorios.RepositorioGerente;
 import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.repositorios.RepositorioRol;
 import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.repositorios.RepositorioUsuario;
+
+import java.util.List;
 
 
 @Service
@@ -35,4 +38,15 @@ public class ServicioGerente {
     }
 
 
+    public List<Gerente> listaGerentes(int offset, int limit) {
+        return repositorioGerente.findAll();
+    }
+
+    public long cantidadGerentes() {
+        return repositorioGerente.count();
+    }
+
+    public void eliminar(Gerente gerente) {
+        repositorioGerente.delete(gerente);
+    }
 }
