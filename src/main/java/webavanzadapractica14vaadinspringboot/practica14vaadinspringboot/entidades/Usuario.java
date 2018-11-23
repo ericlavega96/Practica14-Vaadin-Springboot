@@ -53,8 +53,8 @@ public class Usuario implements Serializable {
     public String toString() {
         return "Usuario{" +
                 "username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", roles=" + (roles == null ? "No hay roles": Arrays.asList(roles).toString()) +
-                '}';
+                ", password='" + password + '\''; /*+
+                *//*", roles=" + (roles == null ? "No hay roles": Arrays.asList(roles).toString()) +
+                '}';*/
     }
 }

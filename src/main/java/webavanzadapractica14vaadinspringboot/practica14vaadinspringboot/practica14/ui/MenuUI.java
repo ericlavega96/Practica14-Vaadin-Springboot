@@ -7,31 +7,50 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.router.RouterLink;
-import com.vaadin.flow.server.VaadinRequest;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
+import com.vaadin.flow.router.RouterLayout;
+import com.vaadin.flow.server.VaadinSession;
 import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.practica14.LogIn;
-import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.practica14.MainView;
 
-import java.awt.font.LayoutPath;
 
-public class MenuUI extends VerticalLayout {
 
-        public MenuUI () {
+public class MenuUI extends VerticalLayout implements BeforeEnterObserver {
 
-        Button gerentesItem = new Button("Gerentes", event -> {
-            getUI().get().navigate("gerente");
+
+    public MenuUI () {
+
+        HorizontalLayout menuLayout = new HorizontalLayout();
+
+        Button calendarioItem = new Button("Calendario", event -> {
+            VaadinSession.getCurrent().close();
+            UI.getCurrent().navigate("calendario");
+
         });
-        gerentesItem.setIcon(new Icon(VaadinIcon.USERS));
+
+        calendarioItem.setIcon(new Icon(VaadinIcon.CALENDAR));
 
         Button logoutItem = new Button("Salir", event -> {
-            getUI().get().navigate("login");
+            VaadinSession.getCurrent().close();
+            UI.getCurrent().navigate("login");
+
         });
+
         logoutItem.setIcon(new Icon(VaadinIcon.EXIT_O));
 
-        HorizontalLayout menuLayout = new HorizontalLayout(gerentesItem,logoutItem);
+        menuLayout.add(calendarioItem,logoutItem);
         menuLayout.setSizeFull();
         menuLayout.setAlignItems(Alignment.CENTER);
         menuLayout.setSpacing(true);
+
         add(menuLayout);
+    }
+
+
+    @Override
+    public void beforeEnter(BeforeEnterEvent event) {
+        if(VaadinSession.getCurrent().getAttribute("username") == null){
+            event.rerouteTo("login");
+        }
     }
 }

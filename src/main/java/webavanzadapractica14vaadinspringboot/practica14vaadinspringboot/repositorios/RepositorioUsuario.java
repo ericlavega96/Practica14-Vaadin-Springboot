@@ -6,8 +6,6 @@ import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.entidade
 import java.util.List;
 
 public interface RepositorioUsuario extends JpaRepository<Usuario,String> {
-    @Override
-    List<Usuario> findAll();
 
     Usuario findByUsernameAndPassword(String username, String password);
 

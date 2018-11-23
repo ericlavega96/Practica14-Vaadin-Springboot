@@ -1,5 +1,6 @@
 package webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.practica14;
 
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -13,13 +14,17 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.calendar.CalendarComponent;
 import org.vaadin.calendar.data.AbstractCalendarDataProvider;
 import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.entidades.Evento;
+import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.entidades.Usuario;
+import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.practica14.ui.MenuUI;
 import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.servicios.ServicioEvento;
+import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.servicios.ServicioUsuario;
 
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
@@ -34,9 +39,31 @@ public class Calendario extends VerticalLayout {
     //private static ServicioEvento servicioEvento;
     private ServicioEvento servicioEvento;
 
+    private ServicioUsuario servicioUsuario;
 
-    public Calendario(@Autowired ServicioEvento servicioEvento) {
+    private MenuUI menuUI;
+
+
+    public Calendario(@Autowired ServicioUsuario servicioUsuario,@Autowired ServicioEvento servicioEvento) {
         this.servicioEvento = servicioEvento;
+        this.servicioUsuario = servicioUsuario;
+        this.menuUI = new MenuUI();
+
+
+        if(VaadinSession.getCurrent().getAttribute("username") != null){
+            Usuario logUser = servicioUsuario.getUserByUsername(VaadinSession.getCurrent().getAttribute("username").toString());
+            System.out.println(logUser.toString());
+
+            if(servicioUsuario.isAdmin(logUser)){
+                Button gerentesItem = new Button("Gerentes", event -> {
+                    UI.getCurrent().navigate("gerente");
+                });
+                gerentesItem.setIcon(new Icon(VaadinIcon.USERS));
+                HorizontalLayout h1 = (HorizontalLayout) menuUI.getComponentAt(0);
+                h1.add(gerentesItem);
+            }
+        }
+
         CalendarComponent<Evento> calendar= new CalendarComponent<Evento>()
                 .withItemDateGenerator(Evento::getFecha)
                 .withItemLabelGenerator(Evento::getNombre)
@@ -154,7 +181,7 @@ public class Calendario extends VerticalLayout {
         H2 tituloCelendario = new H2("Calendario");
 
 
-        add(tituloPoryecto, tituloCelendario, layoutHorizontal,botones, calendar);
+        add(menuUI,tituloPoryecto, tituloCelendario, layoutHorizontal,botones, calendar);
 
     }
 

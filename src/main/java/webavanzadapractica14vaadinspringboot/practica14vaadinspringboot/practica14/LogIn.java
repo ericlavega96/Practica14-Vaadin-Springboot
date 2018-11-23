@@ -3,20 +3,22 @@ package webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.practic
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.router.BeforeEnterEvent;
-import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouterLayout;
+import com.vaadin.flow.server.VaadinSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.servicios.ServicioUsuario;
 
 
 @Route("login")
-public class LogIn extends VerticalLayout{
-        Label label;
+public class LogIn extends VerticalLayout {
+         H1 h1;
         FormLayout formLayout;
         TextField username;
         PasswordField password;
@@ -27,7 +29,7 @@ public class LogIn extends VerticalLayout{
 
         public LogIn() {
             formLayout = new FormLayout();
-            label = new Label("Iniciar Sesión");
+            h1 = new H1("Iniciar Sesión");
 
             username = new TextField("Nombre de Usuario");
             username.setRequired(true);
@@ -35,19 +37,30 @@ public class LogIn extends VerticalLayout{
 
             password = new PasswordField("Contraseña");
             password.setRequired(true);
-            username.setErrorMessage("Por favor, inserte la contraseña");
+            password.setErrorMessage("Por favor, inserte la contraseña");
+
+
 
             logInBtn = new Button("Iniciar Sesión",event -> {
                 if(servicioUsuario.validarUsuario(username.getValue(),password.getValue())){
-                    getUI().get().navigate("index");
+                    VaadinSession.getCurrent().setAttribute("username", username.getValue());
+                    UI.getCurrent().navigate("index");
                     System.out.println("El usuario se ha logueado satisfactoriamente");
                 }else{
-                    System.out.println("Las credenciales introducidas no son válidas");
+                    Div content = new Div();
+                    content.getStyle().set("color","red");
+                    content.setText("ERROR: Las credenciales insertadas no son válidas");
+
+                    Notification notification = new Notification(content);
+                    notification.setDuration(3000);
+                    notification.open();
+
                 }
             });
-            formLayout.add(label,username,password,logInBtn);
+
+            formLayout.add(username,password,logInBtn);
             setAlignItems(Alignment.CENTER);
-            add(formLayout);
+            add(h1,formLayout);
         }
 }
 

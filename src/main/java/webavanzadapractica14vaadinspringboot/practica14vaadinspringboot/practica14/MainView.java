@@ -7,13 +7,22 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
+import org.springframework.beans.factory.annotation.Autowired;
 import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.practica14.ui.MenuUI;
+import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.servicios.ServicioUsuario;
 
 @Route("index")
 public class MainView extends VerticalLayout {
 
-    public MainView() {
-        MenuUI menuUI = new MenuUI();
+    ServicioUsuario servicioUsuario;
+
+    public MainView(@Autowired ServicioUsuario servicioUsuario) {
+
+        this.servicioUsuario = servicioUsuario;
+
+//        MenuUI menuUI = new MenuUI(servicioUsuario);
+
+
         Label label = new Label("Bienvenido a la página principal");
         /*HorizontalLayout menu = new HorizontalLayout();
         menu.setSizeFull();
@@ -22,7 +31,7 @@ public class MainView extends VerticalLayout {
         gerentesView.setIcon(new Icon(VaadinIcon.USER));
         Button view2 = new Button("View 2", e -> getUI().get().navigate(""));
         menu.add(gerentesView,view2);*/
-        add(menuUI,label);
+        add(label);
 
     }
 }

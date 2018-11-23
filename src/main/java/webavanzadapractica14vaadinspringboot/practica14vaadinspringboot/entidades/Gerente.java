@@ -20,14 +20,14 @@ public class Gerente implements Serializable {
     @Column(unique = true)
     private String correo;
 
-    @NotNull
-    @OneToOne(cascade = CascadeType.ALL)
+
+    @OneToOne
     private Usuario usuario;
 
     public Gerente() {
     }
 
-    public Gerente(@NotNull String nombres, @NotNull String apellidos, @NotNull String correo, @NotNull Usuario usuario) {
+    public Gerente(String nombres, String apellidos, String correo, Usuario usuario) {
         this.nombres = nombres;
         this.apellidos = apellidos;
         this.correo = correo;
@@ -80,8 +80,8 @@ public class Gerente implements Serializable {
                 "id=" + idGerente +
                 ", nombres='" + nombres + '\'' +
                 ", apellidos='" + apellidos + '\'' +
-                 new String((usuario == null ?", No hay username":usuario.getUsername()))+ '\''+
-                new String((usuario == null ?", No hay password":usuario.getPassword()))+
+                 (usuario == null ?", No hay username":usuario.getUsername())+ '\''+
+                (usuario == null ?", No hay password":usuario.getPassword())+
                 '}';
     }
 }

@@ -7,6 +7,7 @@ import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.entidade
 import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.entidades.Usuario;
 import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.repositorios.RepositorioGerente;
 import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.repositorios.RepositorioRol;
+import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.repositorios.RepositorioUsuario;
 
 
 @Service
@@ -18,14 +19,17 @@ public class ServicioGerente {
     @Autowired
     private RepositorioRol repositorioRol;
 
+    @Autowired
+    private RepositorioUsuario repositorioUsuario;
+
+
+
     public void crearGerente(Gerente gerente){
 
-        Rol gerenteRol = repositorioRol.getOne("ROLE_GERENTE");
-        if(gerenteRol.equals(null)){
-            gerenteRol = new Rol("ROLE_GERENTE");
-        }
-        gerente.getUsuario().getRoles().add(gerenteRol);
+        gerente.getUsuario().getRoles().add(repositorioRol.getOne("ROLE_GERENTE"));
+        repositorioUsuario.save(gerente.getUsuario());
         repositorioGerente.save(gerente);
+
         System.out.println("El gerente ha sido creado satisfactoriamente!");
 
     }

@@ -8,6 +8,8 @@ import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.entidade
 import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.repositorios.RepositorioRol;
 import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.repositorios.RepositorioUsuario;
 
+import java.util.Set;
+
 @Service
 public class ServicioUsuario {
 
@@ -27,7 +29,7 @@ public class ServicioUsuario {
         Usuario admin = new Usuario();
         admin.setUsername("admin");
         admin.setPassword("1234");//bCryptPasswordEncoder.encode("1234"));
-        admin.getRoles().add(new Rol("ROLE_ADMIN"));
+        admin.getRoles().add(repositorioRol.getOne("ROLE_ADMIN"));
         repositorioUsuario.save(admin);
         System.out.println("El usuario administrador ha sido creado satisfactoriamente");
     }
@@ -35,8 +37,24 @@ public class ServicioUsuario {
 
     public boolean validarUsuario(String username,String password){
         Usuario usuario = repositorioUsuario.findByUsername(username);
-        if(usuario != null && password.equals(usuario.getPassword()))
-            return true;
+        return usuario != null && password.equals(usuario.getPassword());
+    }
+
+    public Usuario getUserByUsername(String username){
+        try{
+            return repositorioUsuario.findByUsername(username);
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public boolean isAdmin(Usuario usuario){
+        for (Rol rol: usuario.getRoles()) {
+            if(rol.getRol().equals("ROLE_ADMIN"))
+                return true;
+        }
         return false;
     }
+
 }
