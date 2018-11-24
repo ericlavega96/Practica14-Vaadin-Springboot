@@ -49,4 +49,14 @@ public class ServicioGerente {
     public void eliminar(Gerente gerente) {
         repositorioGerente.delete(gerente);
     }
+
+    public Gerente findGerenteById(Long id){
+        return repositorioGerente.getOne(id);
+    }
+
+    public void guardarGerente(Gerente gerente){
+        repositorioGerente.save(gerente);
+    }
 }
+
+

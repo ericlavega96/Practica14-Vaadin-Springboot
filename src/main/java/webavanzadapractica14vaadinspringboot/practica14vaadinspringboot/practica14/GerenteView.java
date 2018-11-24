@@ -1,5 +1,6 @@
 package webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.practica14;
 
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -51,6 +52,18 @@ public class GerenteView extends VerticalLayout {
     HorizontalLayout h1;
     HorizontalLayout buttonsLayout;
 
+    VerticalLayout editGerenteLayout;
+    Label infoUsuarioEditLbl;
+    TextField nombresEdit;
+    TextField apellidosEdit;
+    TextField correoEdit;
+    HorizontalLayout buttonsEditLayout;
+    Button btnEditGerente;
+    Button btnCancelarEditGerente;
+
+    Dialog editEventoDialog;
+
+
     Grid<Gerente> tablaGerentes;
 
     DataProvider<Gerente,Void> dataProvider;
@@ -58,7 +71,10 @@ public class GerenteView extends VerticalLayout {
     Button btnCrear;
     Button btnCancelar;
     Button eliminarGerente;
+    Button editarGerente;
+    Button btnAgregarGerente;
     Binder<Gerente> gerenteBinder;
+    Binder<Gerente> gerenteEditBinder;
     Binder<Usuario> usuarioBinder;
 
     Gerente gerenteSeleccionado;
@@ -109,8 +125,41 @@ public class GerenteView extends VerticalLayout {
         repeatPassword = new PasswordField("Repetir contraseña");
         gerenteFormLayout = new VerticalLayout();
         buttonsLayout = new HorizontalLayout();
+        buttonsEditLayout = new HorizontalLayout();
+
+        editEventoDialog = new Dialog();
+
+        btnEditGerente = new Button("Editar",event -> {
+            try{
+                if(gerenteSeleccionado != null){
+                    Gerente gerenteEditado = servicioGerente.findGerenteById(Long.valueOf(gerenteSeleccionado.getIdGerente()));
+                    gerenteEditado.setNombres(nombresEdit.getValue());
+                    gerenteEditado.setApellidos(apellidosEdit.getValue());
+                    gerenteEditado.setCorreo(correo.getValue());
+                    servicioGerente.guardarGerente(gerenteEditado);
+                    Notification.show("El gerente ha sido actualizado con exito");
+                    dataProvider.refreshAll();
+                    editEventoDialog.close();
+                }
+            }catch (Exception e){
+                System.out.println("Error al editar el gerente " + e);
+            }
+        });
+        btnCancelarEditGerente = new Button("Cancelar",event -> {
+            editEventoDialog.close();
+        });
+
+        infoUsuarioEditLbl = new Label("Editar información de gerente");
+        nombresEdit = new TextField("Nombres");
+        apellidosEdit = new TextField("Apellidos");
+        correoEdit = new TextField("Correo");
+        editGerenteLayout = new VerticalLayout();
+        buttonsEditLayout.add(btnEditGerente,btnCancelarEditGerente);
+        editGerenteLayout.add(infoUsuarioEditLbl,nombresEdit,apellidosEdit,correoEdit,buttonsEditLayout);
+
 
         gerenteBinder = new Binder<>();
+        gerenteEditBinder = new Binder<>();
         usuarioBinder = new Binder<>();
 
         btnCrear = new Button("Crear",event -> {
@@ -144,11 +193,28 @@ public class GerenteView extends VerticalLayout {
             UI.getCurrent().getPage().reload();
         });
 
+        btnAgregarGerente = new Button(VaadinIcon.PLUS.create(),event -> {
+           if(gerenteFormLayout.isVisible()){
+               gerenteFormLayout.setVisible(false);
+           }else{
+               gerenteFormLayout.setVisible(true);
+           }
+        });
+        gerenteFormLayout.setVisible(false);
+
         gerenteBinder.forField(nombres).asRequired("Por favor, inserte los nombres")
         .bind(Gerente::getNombres,Gerente::setNombres);
         gerenteBinder.forField(apellidos).asRequired("Por favor, inserte los apellidos")
                 .bind(Gerente::getApellidos,Gerente::setApellidos);
         gerenteBinder.forField(correo).asRequired("Por favor, inserte un correo")
+                .withValidator(new EmailValidator("Por favor,inserte un correo válido"))
+                .bind(Gerente::getCorreo,Gerente::setCorreo);
+
+        gerenteEditBinder.forField(nombresEdit).asRequired("Por favor, inserte los nombres")
+                .bind(Gerente::getNombres,Gerente::setNombres);
+        gerenteEditBinder.forField(apellidosEdit).asRequired("Por favor, inserte los apellidos")
+                .bind(Gerente::getApellidos,Gerente::setApellidos);
+        gerenteEditBinder.forField(correoEdit).asRequired("Por favor, inserte un correo")
                 .withValidator(new EmailValidator("Por favor,inserte un correo válido"))
                 .bind(Gerente::getCorreo,Gerente::setCorreo);
 
@@ -176,33 +242,41 @@ public class GerenteView extends VerticalLayout {
             dataProvider.refreshAll();
         }))).setHeader("Eliminar");
 
-        tablaGerentes.addColumn(new ComponentRenderer<>(gerente ->  eliminarGerente = new Button(VaadinIcon.EDIT.create(),event -> {
+        tablaGerentes.addColumn(new ComponentRenderer<>(gerente ->  editarGerente = new Button(VaadinIcon.EDIT.create(),event -> {
+            editEventoDialog.add(editGerenteLayout);
+            if(!editEventoDialog.isOpened()){
+                nombresEdit.setValue(gerenteSeleccionado.getNombres());
+                apellidosEdit.setValue(gerenteSeleccionado.getApellidos());
+                correoEdit.setValue(gerenteSeleccionado.getCorreo());
+                editEventoDialog.open();
+            }
+            else
+                editEventoDialog.close();
+
             Notification.show("Gerente " + gerente.getIdGerente() + " editado con éxito!");
-            servicioGerente.eliminar(gerente);
             dataProvider.refreshAll();
         }))).setHeader("Editar");
 
         tablaGerentes.addSelectionListener(s->{
             if(s.getFirstSelectedItem().isPresent()){
                 gerenteSeleccionado = s.getFirstSelectedItem().get();
-                gerenteBinder.readBean(gerenteSeleccionado);
+                try {
+                    gerenteEditBinder.writeBean(gerenteSeleccionado);
+                    System.out.println(gerenteSeleccionado.getIdGerente());
+                } catch (ValidationException e) {
+                    e.printStackTrace();
+                }
                 eliminarGerente.setEnabled(true);
-                repeatPassword.setVisible(false);
-                username.setVisible(false);
-                password.setVisible(false);
-                infoUsuarioLbl.setVisible(false);
-                repeatPassword.setVisible(false);
+                editarGerente.setEnabled(true);
+
             }else{
-                repeatPassword.setVisible(true);
-                username.setVisible(true);
-                password.setVisible(true);
-                repeatPassword.setVisible(true);
-                infoUsuarioLbl.setVisible(true);
                 eliminarGerente.setEnabled(false);
+                editarGerente.setEnabled(false);
             }
         });
 
-        tablaGerentes.setWidth("50%");
+        tablaGerentes.setSizeUndefined();
+        gerenteFormLayout.setSizeFull();
 
 
 
@@ -218,7 +292,7 @@ public class GerenteView extends VerticalLayout {
         buttonsLayout.add(btnCrear,btnCancelar);
         formLayout.add(h1);
         gerenteFormLayout.add(formLayout,buttonsLayout);
-        add(menuUI,tablaGerentes,gerentLbl,gerenteFormLayout);
+        add(menuUI,gerentLbl,btnAgregarGerente,gerenteFormLayout,tablaGerentes);
         setSizeFull();
         dataProvider.refreshAll();
     }
