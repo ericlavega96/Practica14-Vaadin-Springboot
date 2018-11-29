@@ -8,12 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.entidades.Evento;
 import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.servicios.MailSender;
 import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.servicios.ServicioEvento;
 import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.servicios.ServicioRol;
 import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.servicios.ServicioUsuario;
 
 import java.io.IOException;
+import java.util.Date;
 
 @SpringBootApplication
 public class Practica14VaadinSpringbootApplication {
@@ -29,6 +31,6 @@ public class Practica14VaadinSpringbootApplication {
         servicioRol.insertarRoles();
         servicioUsuario.crearUsuarioAdmin();
         servicioEvento.crearPrueba();
-        new MailSender().sendNotificacionEvento();
+        new MailSender().sendNotificacionEvento(new Evento("PUCMM",new Date()));
     }
 }
