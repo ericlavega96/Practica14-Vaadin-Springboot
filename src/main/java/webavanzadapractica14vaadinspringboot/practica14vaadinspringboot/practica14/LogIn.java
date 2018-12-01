@@ -44,7 +44,7 @@ public class LogIn extends VerticalLayout {
             logInBtn = new Button("Iniciar Sesión",event -> {
                 if(servicioUsuario.validarUsuario(username.getValue(),password.getValue())){
                     VaadinSession.getCurrent().setAttribute("username", username.getValue());
-                    UI.getCurrent().navigate("index");
+                    UI.getCurrent().navigate("calendario");
                     System.out.println("El usuario se ha logueado satisfactoriamente");
                 }else{
                     Div content = new Div();

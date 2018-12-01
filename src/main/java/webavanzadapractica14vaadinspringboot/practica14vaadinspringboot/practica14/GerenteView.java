@@ -6,7 +6,6 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -17,7 +16,6 @@ import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.*;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
-import com.vaadin.flow.data.renderer.NativeButtonRenderer;
 import com.vaadin.flow.data.validator.EmailValidator;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
@@ -25,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.entidades.Gerente;
 import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.entidades.Usuario;
 import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.practica14.ui.MenuUI;
-import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.servicios.ServicioGerente;
 import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.servicios.ServicioUsuario;
 
 @Route("gerente")
@@ -126,7 +123,6 @@ public class GerenteView extends VerticalLayout {
         gerenteFormLayout = new VerticalLayout();
         buttonsLayout = new HorizontalLayout();
         buttonsEditLayout = new HorizontalLayout();
-
         editEventoDialog = new Dialog();
 
         btnEditGerente = new Button("Editar",event -> {
@@ -200,7 +196,7 @@ public class GerenteView extends VerticalLayout {
                gerenteFormLayout.setVisible(true);
            }
         });
-        gerenteFormLayout.setVisible(false);
+        gerenteFormLayout.setVisible(true);
 
         gerenteBinder.forField(nombres).asRequired("Por favor, inserte los nombres")
         .bind(Gerente::getNombres,Gerente::setNombres);
@@ -253,19 +249,13 @@ public class GerenteView extends VerticalLayout {
             else
                 editEventoDialog.close();
 
-            Notification.show("Gerente " + gerente.getIdGerente() + " editado con éxito!");
-            dataProvider.refreshAll();
         }))).setHeader("Editar");
 
         tablaGerentes.addSelectionListener(s->{
             if(s.getFirstSelectedItem().isPresent()){
                 gerenteSeleccionado = s.getFirstSelectedItem().get();
-                try {
-                    gerenteEditBinder.writeBean(gerenteSeleccionado);
-                    System.out.println(gerenteSeleccionado.getIdGerente());
-                } catch (ValidationException e) {
-                    e.printStackTrace();
-                }
+                //gerenteEditBinder.readBean(gerenteSeleccionado);
+                System.out.println(gerenteSeleccionado.getIdGerente());
                 eliminarGerente.setEnabled(true);
                 editarGerente.setEnabled(true);
 
@@ -275,12 +265,14 @@ public class GerenteView extends VerticalLayout {
             }
         });
 
-        tablaGerentes.setSizeUndefined();
+        tablaGerentes.setWidth("50%");
         gerenteFormLayout.setSizeFull();
 
 
 
         formLayout = new FormLayout();
+        VerticalLayout vtable = new VerticalLayout(tablaGerentes);
+        vtable.setSizeFull();
         h1 = new HorizontalLayout();
 
         infoPersonalLayout = new VerticalLayout();
@@ -292,9 +284,10 @@ public class GerenteView extends VerticalLayout {
         buttonsLayout.add(btnCrear,btnCancelar);
         formLayout.add(h1);
         gerenteFormLayout.add(formLayout,buttonsLayout);
-        add(menuUI,gerentLbl,btnAgregarGerente,gerenteFormLayout,tablaGerentes);
+        add(menuUI,gerentLbl,vtable,btnAgregarGerente,gerenteFormLayout);
         setSizeFull();
         dataProvider.refreshAll();
+        //gerenteFormLayout.setVisible(true);
     }
 }
 

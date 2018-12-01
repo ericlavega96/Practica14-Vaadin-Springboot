@@ -2,10 +2,8 @@ package webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.jobs;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.entidades.Evento;
-import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.entidades.Gerente;
 import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.servicios.MailSender;
 import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.servicios.ServicioEvento;
-import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.servicios.ServicioGerente;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
