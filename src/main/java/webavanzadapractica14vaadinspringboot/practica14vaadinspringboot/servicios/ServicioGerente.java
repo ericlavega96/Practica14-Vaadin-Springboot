@@ -42,6 +42,10 @@ public class ServicioGerente {
         return repositorioGerente.findAll();
     }
 
+    public List<Gerente> listaGerentes() {
+        return repositorioGerente.findAll();
+    }
+
     public long cantidadGerentes() {
         return repositorioGerente.count();
     }
@@ -56,6 +60,10 @@ public class ServicioGerente {
 
     public void guardarGerente(Gerente gerente){
         repositorioGerente.save(gerente);
+    }
+
+    public boolean isEmpty(){
+        return repositorioGerente.count()<=0;
     }
 }
 
