@@ -18,6 +18,8 @@ public class Evento implements Serializable {
     private String nombre;
     @NotNull
     private Date fecha;
+    @NotNull
+    private boolean enviado;
 
     public Evento() {
     }
@@ -25,6 +27,7 @@ public class Evento implements Serializable {
     public Evento(@NotNull String nombre, @NotNull Date fecha) {
         this.nombre = nombre;
         this.fecha = fecha;
+        this.enviado = false;
     }
 
     public Long getIdEvento() {
@@ -53,5 +56,13 @@ public class Evento implements Serializable {
 
     public CalendarItemTheme getTema(){
         return CalendarItemTheme.Blue;
+    }
+
+    public boolean isEnviado() {
+        return enviado;
+    }
+
+    public void setEnviado(boolean enviado) {
+        this.enviado = enviado;
     }
 }

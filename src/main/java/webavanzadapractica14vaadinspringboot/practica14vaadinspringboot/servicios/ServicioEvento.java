@@ -51,6 +51,7 @@ public class ServicioEvento {
             Evento modificado = repositorioEvento.findById(evento.getIdEvento()).get();
             modificado.setNombre(evento.getNombre());
             modificado.setFecha(evento.getFecha());
+            modificado.setEnviado(evento.isEnviado());
             repositorioEvento.save(modificado);
             return repositorioEvento.findById(modificado.getIdEvento()).get();
         } catch (Exception e){

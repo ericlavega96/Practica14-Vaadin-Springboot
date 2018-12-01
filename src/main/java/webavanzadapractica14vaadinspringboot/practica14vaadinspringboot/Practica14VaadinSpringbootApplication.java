@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.entidades.Evento;
 import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.servicios.MailSender;
 import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.servicios.ServicioEvento;
@@ -18,11 +19,12 @@ import java.io.IOException;
 import java.util.Date;
 
 @SpringBootApplication
+@EnableScheduling
 public class Practica14VaadinSpringbootApplication {
 
 
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         ApplicationContext applicationContext = SpringApplication.run(Practica14VaadinSpringbootApplication.class, args);
 
         ServicioUsuario servicioUsuario = (ServicioUsuario) applicationContext.getBean("servicioUsuario");
@@ -31,6 +33,5 @@ public class Practica14VaadinSpringbootApplication {
         servicioRol.insertarRoles();
         servicioUsuario.crearUsuarioAdmin();
         servicioEvento.crearPrueba();
-        new MailSender().sendNotificacionEvento(new Evento("PUCMM",new Date()));
     }
 }
