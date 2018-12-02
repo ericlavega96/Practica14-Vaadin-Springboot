@@ -70,6 +70,12 @@ public class ServicioGerente {
     public Gerente findByUsername(String username){
         return repositorioGerente.findByUsuario_Username(username);
     }
+
+    public boolean emailExists(String correo){ return repositorioGerente.existsByCorreo(correo);}
+
+    public boolean usernameExists(String username){
+        return repositorioGerente.existsByUsuario_Username(username);
+    }
 }
 
 

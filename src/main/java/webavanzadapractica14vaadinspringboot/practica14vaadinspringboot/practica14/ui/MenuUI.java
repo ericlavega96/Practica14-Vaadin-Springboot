@@ -30,15 +30,8 @@ public class MenuUI extends VerticalLayout implements BeforeEnterObserver {
 
         calendarioItem.setIcon(new Icon(VaadinIcon.CALENDAR));
 
-        Button logoutItem = new Button("Salir", event -> {
-            VaadinSession.getCurrent().close();
-            UI.getCurrent().navigate("login");
 
-        });
-
-        logoutItem.setIcon(new Icon(VaadinIcon.EXIT_O));
-
-        menuLayout.add(calendarioItem,logoutItem);
+        menuLayout.add(calendarioItem);
         menuLayout.setSizeFull();
         menuLayout.setAlignItems(Alignment.CENTER);
         menuLayout.setSpacing(true);

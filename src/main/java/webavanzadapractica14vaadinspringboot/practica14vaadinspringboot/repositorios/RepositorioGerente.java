@@ -6,4 +6,8 @@ import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.entidade
 public interface RepositorioGerente extends JpaRepository<Gerente,Long> {
 
     Gerente findByUsuario_Username(String username);
+
+    boolean existsByCorreo(String correo);
+
+    boolean existsByUsuario_Username(String username);
 }

@@ -19,8 +19,6 @@ public class ServicioUsuario {
     @Autowired
     private RepositorioRol repositorioRol;
 
-    //private BCryptPasswordEncoder bCryptPasswordEncoder= new BCryptPasswordEncoder();
-
     public String encryptPassword(String rawPassword){
         return rawPassword;//bCryptPasswordEncoder.encode(rawPassword);
     }
@@ -50,6 +48,10 @@ public class ServicioUsuario {
                 return true;
         }
         return false;
+    }
+
+    public boolean existByUsername(String username){
+        return repositorioUsuario.existsByUsername(username);
     }
 
 }
