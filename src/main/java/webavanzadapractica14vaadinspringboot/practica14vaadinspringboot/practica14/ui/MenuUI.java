@@ -22,8 +22,8 @@ public class MenuUI extends VerticalLayout implements BeforeEnterObserver {
 
         HorizontalLayout menuLayout = new HorizontalLayout();
 
+
         Button calendarioItem = new Button("Calendario", event -> {
-            VaadinSession.getCurrent().close();
             UI.getCurrent().navigate("calendario");
 
         });

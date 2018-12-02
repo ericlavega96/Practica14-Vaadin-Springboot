@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.entidades.Gerente;
 import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.entidades.Usuario;
 import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.practica14.ui.MenuUI;
+import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.servicios.ServicioGerente;
 import webavanzadapractica14vaadinspringboot.practica14vaadinspringboot.servicios.ServicioUsuario;
 
 @Route("gerente")
@@ -86,7 +87,6 @@ public class GerenteView extends VerticalLayout {
 
         if(VaadinSession.getCurrent().getAttribute("username") != null){
             Usuario logUser = servicioUsuario.getUserByUsername(VaadinSession.getCurrent().getAttribute("username").toString());
-            System.out.println(logUser.toString());
 
             if(servicioUsuario.isAdmin(logUser)){
                 Button gerentesItem = new Button("Gerentes", event -> {
@@ -95,6 +95,14 @@ public class GerenteView extends VerticalLayout {
                 gerentesItem.setIcon(new Icon(VaadinIcon.USERS));
                 HorizontalLayout h1 = (HorizontalLayout) menuUI.getComponentAt(0);
                 h1.add(gerentesItem);
+            }else{
+                Button perfilItem = new Button("Perfil", event -> {
+                    UI.getCurrent().navigate("perfil");
+
+                });
+                perfilItem.setIcon(VaadinIcon.USER.create());
+                HorizontalLayout h1 = (HorizontalLayout) menuUI.getComponentAt(0);
+                h1.add(perfilItem);
             }
         }
 

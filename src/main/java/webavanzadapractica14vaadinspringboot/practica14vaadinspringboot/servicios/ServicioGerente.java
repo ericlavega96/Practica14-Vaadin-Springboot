@@ -58,12 +58,17 @@ public class ServicioGerente {
         return repositorioGerente.findById(id).get();
     }
 
+
     public void guardarGerente(Gerente gerente){
         repositorioGerente.save(gerente);
     }
 
     public boolean isEmpty(){
         return repositorioGerente.count()<=0;
+    }
+
+    public Gerente findByUsername(String username){
+        return repositorioGerente.findByUsuario_Username(username);
     }
 }
 

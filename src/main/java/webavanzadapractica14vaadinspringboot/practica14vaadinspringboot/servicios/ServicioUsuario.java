@@ -41,12 +41,7 @@ public class ServicioUsuario {
     }
 
     public Usuario getUserByUsername(String username){
-        try{
-            return repositorioUsuario.findByUsername(username);
-        }catch (Exception e){
-            e.printStackTrace();
-            return null;
-        }
+        return repositorioUsuario.findByUsername(username);
     }
 
     public boolean isAdmin(Usuario usuario){

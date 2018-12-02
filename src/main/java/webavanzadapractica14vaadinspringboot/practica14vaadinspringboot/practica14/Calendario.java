@@ -52,7 +52,6 @@ public class Calendario extends VerticalLayout {
 
         if(VaadinSession.getCurrent().getAttribute("username") != null){
             Usuario logUser = servicioUsuario.getUserByUsername(VaadinSession.getCurrent().getAttribute("username").toString());
-            System.out.println(logUser.toString());
 
             if(servicioUsuario.isAdmin(logUser)){
                 Button gerentesItem = new Button("Gerentes", event -> {
@@ -61,6 +60,14 @@ public class Calendario extends VerticalLayout {
                 gerentesItem.setIcon(new Icon(VaadinIcon.USERS));
                 HorizontalLayout h1 = (HorizontalLayout) menuUI.getComponentAt(0);
                 h1.add(gerentesItem);
+            }else{
+                Button perfilItem = new Button("Perfil", event -> {
+                    UI.getCurrent().navigate("perfil");
+
+                });
+                perfilItem.setIcon(VaadinIcon.USER.create());
+                HorizontalLayout h1 = (HorizontalLayout) menuUI.getComponentAt(0);
+                h1.add(perfilItem);
             }
         }
 
