@@ -23,10 +23,9 @@ public class MailSender {
             for (Gerente gerente : servicioGerente.listaGerentes()) {
                 Email from = new Email("test@example.com");
                 String subject = "[" + evento.getIdEvento() + " - " + evento.getNombre() + "] Notificación de evento";
-                //Email to = new Email(gerente.getCorreo());
-                Email to = new Email("adonisveloz@hotmail.com");
+                Email to = new Email(gerente.getCorreo());
                 Content content = new Content("text/plain", "Este mensaje está dirigido a " + gerente.getNombres() +
-                        " " + gerente.getApellidos() + "El evento " + evento.getNombre() + " esta a punto de empezar.");
+                        " " + gerente.getApellidos() + ". El evento " + evento.getNombre() + " esta a punto de empezar.");
                 Mail mail = new Mail(from, subject, to, content);
 
                 SendGrid sg = new SendGrid("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");

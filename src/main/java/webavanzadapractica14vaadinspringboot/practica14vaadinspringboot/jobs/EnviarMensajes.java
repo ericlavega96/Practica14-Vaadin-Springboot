@@ -27,7 +27,7 @@ public class EnviarMensajes {
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-    @Scheduled(fixedRate = (1000 * 60 * 5))
+    @Scheduled(fixedRate = (1000))// * 60 * 5))
     public void enviarMensaje() throws IOException {
         for(Evento evento : servicioEvento.listarEventos()) {
             if(!evento.isEnviado() && !evento.getFecha().after(new Date()))
